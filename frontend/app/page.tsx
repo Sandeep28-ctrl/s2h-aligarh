@@ -122,4 +122,42 @@ export default function Home() {
         </section>
       </main>
 
-      {/* WhatsApp
+      {/* WhatsApp Floating Button */}
+      <a
+        href="https://wa.me/+916397951585?text=नमस्ते S2H - Smart Services! मुझे एक सर्विस बुक करनी है।"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          position: "fixed",
+          bottom: "30px",
+          right: "30px",
+          backgroundColor: "#25d366",
+          color: "white",
+          width: "60px",
+          height: "60px",
+          borderRadius: "50%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "30px",
+          boxShadow: "0 10px 25px rgba(0,0,0,0.3)",
+          zIndex: 1000,
+          textDecoration: "none",
+          transition: "transform 0.3s ease"
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+      >
+        <img 
+          src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" 
+          alt="WhatsApp" 
+          style={{ width: "35px" }} 
+        />
+      </a>
+
+      <footer style={{ textAlign: "center", padding: "40px", color: "#64748b", borderTop: "1px solid #1e293b" }}>
+        © 2026 S2H - Smart Services to Home Aligarh. All rights reserved.
+      </footer>
+    </div>
+  );
+}
