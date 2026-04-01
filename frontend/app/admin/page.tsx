@@ -1,4 +1,4 @@
-"use client";
+ "use client";
 import { useEffect, useState } from "react";
 
 export default function AdminDashboard() {
@@ -51,13 +51,13 @@ export default function AdminDashboard() {
     return (
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", backgroundColor: "#111", color: "white" }}>
         <form onSubmit={handleLogin} style={{ padding: "30px", border: "1px solid #444", borderRadius: "10px", textAlign: "center" }}>
-          <h2>S2H Admin Login</h2>
+          <h2>S2H - Smart Admin Login</h2>
           <input 
             type="password" 
             placeholder="Enter Password" 
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            style={{ padding: "10px", margin: "15px 0", borderRadius: "5px", border: "none", width: "100%" }}
+            style={{ padding: "10px", margin: "15px 0", borderRadius: "5px", border: "none", width: "100%", color: "black" }}
           />
           <button type="submit" style={{ padding: "10px 20px", backgroundColor: "#0070f3", color: "white", border: "none", borderRadius: "5px", cursor: "pointer", width: "100%" }}>
             Unlock Dashboard
@@ -70,7 +70,9 @@ export default function AdminDashboard() {
   // अगर लॉगिन सही है, तो टेबल दिखाओ
   return (
     <div style={{ padding: "30px", backgroundColor: "#f4f4f4", minHeight: "100vh", color: "#333" }}>
-      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>S2H Aligarh - Admin Panel 🔐</h1>
+      {/* नया अपडेटेड नाम यहाँ है */}
+      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>S2H - Smart Admin Panel 🔐</h1>
+      
       {loading ? <p style={{ textAlign: "center" }}>लोड हो रहा है...</p> : (
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", backgroundColor: "white", boxShadow: "0 0 10px rgba(0,0,0,0.1)" }}>
