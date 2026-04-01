@@ -1,4 +1,4 @@
-const express = require('express');
+ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
@@ -25,15 +25,17 @@ const bookingSchema = new mongoose.Schema({
 
 const Booking = mongoose.model('Booking', bookingSchema);
 
-// 3. Updated Email Config (Port 587 for Render)
+// 3. Final Updated Email Config (Render & Gmail Fix)
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
   host: 'smtp.gmail.com',
   port: 587,
   secure: false, // 587 के लिए false ज़रूरी है
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
+  },
+  tls: {
+    rejectUnauthorized: false // यह रेंडर के नेटवर्क इशू को फिक्स करेगा
   }
 });
 
@@ -71,9 +73,9 @@ app.post('/book', async (req, res) => {
 
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                console.log("Email Sending Error:", error);
+                console.log("❌ Email Sending Error:", error);
             } else {
-                console.log("Email Sent Successfully: " + info.response);
+                console.log("✅ Email Sent Successfully: " + info.response);
             }
         });
 
