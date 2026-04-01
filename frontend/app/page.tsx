@@ -40,11 +40,13 @@ export default function Home() {
   return (
     <div style={{ fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", backgroundColor: "#0f172a", color: "white", minHeight: "100vh" }}>
       
-      {/* Header / Hero Section */}
+      {/* Header / Hero Section - Updated with Smart Services to Home */}
       <header style={{ padding: "80px 20px", textAlign: "center", background: "linear-gradient(to bottom, #1e293b, #0f172a)" }}>
-        <h1 style={{ fontSize: "3.5rem", fontWeight: "bold", marginBottom: "10px", color: "#38bdf8" }}>S2H Services</h1>
+        <h1 style={{ fontSize: "3.5rem", fontWeight: "bold", marginBottom: "10px", color: "#38bdf8" }}>
+          S2H - Smart Services to Home
+        </h1>
         <p style={{ fontSize: "1.2rem", color: "#94a3b8", maxWidth: "600px", margin: "0 auto" }}>
-          Aligarh की सबसे भरोसेमंद होम सर्विस कंपनी। अब एक क्लिक में एक्सपर्ट्स को घर बुलाएं।
+          Aligarh की सबसे स्मार्ट होम सर्विस कंपनी। अब एक क्लिक में एक्सपर्ट्स को घर बुलाएं।
         </p>
       </header>
 
@@ -120,42 +122,4 @@ export default function Home() {
         </section>
       </main>
 
-      {/* WhatsApp Floating Button */}
-      <a
-        href="https://wa.me/+916397951585?text=नमस्ते S2H Services! मुझे एक सर्विस बुक करनी है।"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          position: "fixed",
-          bottom: "30px",
-          right: "30px",
-          backgroundColor: "#25d366",
-          color: "white",
-          width: "60px",
-          height: "60px",
-          borderRadius: "50%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          fontSize: "30px",
-          boxShadow: "0 10px 25px rgba(0,0,0,0.3)",
-          zIndex: 1000,
-          textDecoration: "none",
-          transition: "transform 0.3s ease"
-        }}
-        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
-        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-      >
-        <img 
-          src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" 
-          alt="WhatsApp" 
-          style={{ width: "35px" }} 
-        />
-      </a>
-
-      <footer style={{ textAlign: "center", padding: "40px", color: "#64748b", borderTop: "1px solid #1e293b" }}>
-        © 2026 S2H Services Aligarh. All rights reserved.
-      </footer>
-    </div>
-  );
-}
+      {/* WhatsApp
