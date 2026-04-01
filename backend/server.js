@@ -1,7 +1,7 @@
- const express = require('express');
+const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const nodemailer = require('nodemailer'); // Nodemailer जोड़ा गया
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const app = express();
@@ -25,13 +25,24 @@ const bookingSchema = new mongoose.Schema({
 
 const Booking = mongoose.model('Booking', bookingSchema);
 
-// 3. Email Config (Transporter)
-// यहाँ अपनी जानकारी भरें
+// 3. Updated Email Config (Port 587 for Render)
 const transporter = nodemailer.createTransport({
   service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // 587 के लिए false ज़रूरी है
   auth: {
-    user: 'your-email@gmail.com', // अपना Gmail यहाँ लिखें
-    pass: 'your-app-password'    // अपना 16-अक्षरों वाला App Password यहाँ लिखें
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+
+// वेरिफिकेशन चेक: सर्वर स्टार्ट होते ही बताएगा कि ईमेल तैयार है या नहीं
+transporter.verify((error, success) => {
+  if (error) {
+    console.log("❌ Email Config Error:", error);
+  } else {
+    console.log("✅ Server is ready to send emails");
   }
 });
 
@@ -52,26 +63,26 @@ app.post('/book', async (req, res) => {
 
         // 2. ईमेल भेजें
         const mailOptions = {
-            from: 'your-email@gmail.com', // आपका ईमेल
-            to: 'your-email@gmail.com',   // आपको ईमेल कहाँ चाहिए (अपना ही ईमेल डाल दें)
+            from: process.env.EMAIL_USER,
+            to: process.env.EMAIL_USER, // आपको अपने ही ईमेल पर खबर मिलेगी
             subject: 'New Booking Alert! 🚀 - S2H Smart Services',
             text: `बधाई संदीप भाई! \n\nआपकी वेबसाइट "Smart Services to Home" पर एक नई बुकिंग आई है। \n\nग्राहक का नाम: ${name} \nसर्विस की ज़रूरत: ${service} \n\nजल्द से जल्द संपर्क करें!`
         };
 
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                console.log("Email Error:", error);
+                console.log("Email Sending Error:", error);
             } else {
-                console.log("Email Sent: " + info.response);
+                console.log("Email Sent Successfully: " + info.response);
             }
         });
 
-        console.log("नई बुकिंग मिली और डेटाबेस में सेव हुई:", req.body);
+        console.log("नई बुकिंग मिली और सेव हुई:", req.body);
         res.status(200).json({ success: true, message: "Booking Saved & Notification Sent!" });
         
     } catch (error) {
         console.error("Booking Error:", error);
-        res.status(500).json({ success: false, message: "Server Error: डेटाबेस या ईमेल में समस्या है" });
+        res.status(500).json({ success: false, message: "Server Error: समस्या आई है" });
     }
 });
 
@@ -100,5 +111,5 @@ app.delete('/admin/bookings/:id', async (req, res) => {
 // 5. Server Start
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`🚀 Server is running on: http://localhost:${PORT}`);
+    console.log(`🚀 Server is running on Port: ${PORT}`);
 });
