@@ -63,3 +63,13 @@ app.listen(PORT, () => {
     console.log(`🚀 Server is running on: http://localhost:${PORT}`);
     console.log(`🔗 Admin API: http://localhost:${PORT}/admin/bookings`);
 });
+// 5. किसी खास बुकिंग को डिलीट करने के लिए API
+app.delete('/admin/bookings/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        await Booking.findByIdAndDelete(id);
+        res.status(200).json({ success: true, message: "Booking deleted successfully!" });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Delete करने में एरर आया" });
+    }
+});
