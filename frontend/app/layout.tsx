@@ -12,12 +12,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// प्रोफेशनल मेटाडेटा: ताकि गूगल सर्च में आपकी साइट अच्छी दिखे
+// प्रोफेशनल मेटाडेटा: नया नाम अपडेट कर दिया गया है
 export const metadata: Metadata = {
-  title: "S2H Services - Aligarh's Best Home Services",
-  description: "Book professional home services in Aligarh including Cleaning, AC Repair, Electrician and more.",
+  title: "S2H - Smart Services to Home | Aligarh",
+  description: "Book Smart Home Services in Aligarh. Professional Cleaning, AC Repair, Electrician and more.",
   verification: {
-    google: "google65f3ee484653599a", // आपका वेरिफिकेशन कोड यहाँ सेट है
+    google: "google65f3ee484653599a", // आपका वेरिफिकेशन कोड यहाँ सुरक्षित है
   },
 };
 
@@ -32,7 +32,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
-        {/* गूगल वेरिफिकेशन टैग */}
+        {/* गूगल वेरिफिकेशन टैग - इसे हटाना नहीं है */}
         <meta name="google-site-verification" content="google65f3ee484653599a" />
       </head>
       <body className="min-h-full flex flex-col">{children}</body>
