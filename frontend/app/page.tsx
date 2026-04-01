@@ -1,4 +1,4 @@
- "use client";
+"use client";
 import { useState } from "react";
 
 export default function Home() {
@@ -15,9 +15,7 @@ export default function Home() {
     };
 
     try {
-      // प्रोफेशनल तरीका: सीधा Render का लिंक इस्तेमाल करना ताकि कोई गड़बड़ न हो
       const apiURL = "https://s2h-aligarh.onrender.com"; 
-      
       const response = await fetch(`${apiURL}/book`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -27,70 +25,104 @@ export default function Home() {
       const data = await response.json();
 
       if (data.success || response.ok) {
-        alert("🎉 Success: " + (data.message || "Booking Saved Successfully!"));
+        alert("🎉 बधाई! आपकी बुकिंग सुरक्षित हो गई है। हम जल्द ही आपसे संपर्क करेंगे।");
         (e.target as HTMLFormElement).reset(); 
       } else {
-        alert("❌ Error: " + data.message);
+        alert("❌ एरर: " + data.message);
       }
     } catch (error) {
-      console.error("Connection Error:", error);
-      alert("Backend से कनेक्शन नहीं हो पाया! कृपया जांचें कि Render पर सर्वर चालू है या नहीं।");
+      alert("कनेक्शन एरर! कृपया इंटरनेट चेक करें।");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ 
-      padding: "40px", 
-      fontFamily: "sans-serif", 
-      backgroundColor: "#111", 
-      color: "white", 
-      minHeight: "100vh",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center"
-    }}>
-      <div style={{ maxWidth: "400px", width: "100%", textAlign: "center" }}>
-        <h1 style={{ fontSize: "2.5rem", marginBottom: "10px" }}>S2H Services</h1>
-        <p style={{ color: "#aaa", marginBottom: "30px" }}>Aligarh's Professional Booking System</p>
+    <div style={{ fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", backgroundColor: "#0f172a", color: "white", minHeight: "100vh" }}>
+      
+      {/* Header / Hero Section */}
+      <header style={{ padding: "80px 20px", textAlign: "center", background: "linear-gradient(to bottom, #1e293b, #0f172a)" }}>
+        <h1 style={{ fontSize: "3.5rem", fontWeight: "bold", marginBottom: "10px", color: "#38bdf8" }}>S2H Services</h1>
+        <p style={{ fontSize: "1.2rem", color: "#94a3b8", maxWidth: "600px", margin: "0 auto" }}>
+          Aligarh की सबसे भरोसेमंद होम सर्विस कंपनी। अब एक क्लिक में एक्सपर्ट्स को घर बुलाएं।
+        </p>
+      </header>
 
-        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-          <input 
-            name="name" 
-            type="text"
-            placeholder="आपका नाम (Your Name)" 
-            style={{ padding: "12px", borderRadius: "8px", border: "1px solid #444", backgroundColor: "#222", color: "white" }}
-            required 
-          />
+      <main style={{ maxWidth: "1000px", margin: "-50px auto 50px", padding: "0 20px" }}>
+        
+        {/* Booking Form Card */}
+        <section style={{ backgroundColor: "#1e293b", padding: "40px", borderRadius: "20px", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5)", border: "1px solid #334155" }}>
+          <h2 style={{ textAlign: "center", marginBottom: "30px", fontSize: "1.8rem" }}>Book Your Service Now</h2>
           
-          <input 
-            name="service" 
-            type="text"
-            placeholder="कौन सी सर्विस चाहिए? (Service)" 
-            style={{ padding: "12px", borderRadius: "8px", border: "1px solid #444", backgroundColor: "#222", color: "white" }}
-            required 
-          />
+          <form onSubmit={handleSubmit} style={{ display: "grid", gap: "20px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <label style={{ color: "#cbd5e1", fontSize: "0.9rem" }}>आपका पूरा नाम (Full Name)</label>
+              <input 
+                name="name" 
+                type="text"
+                placeholder="जैसे: Sandeep Singh" 
+                style={{ padding: "14px", borderRadius: "10px", border: "1px solid #475569", backgroundColor: "#0f172a", color: "white", outline: "none" }}
+                required 
+              />
+            </div>
+            
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <label style={{ color: "#cbd5e1", fontSize: "0.9rem" }}>कौन सी सर्विस चाहिए? (Select Service)</label>
+              <select 
+                name="service" 
+                style={{ padding: "14px", borderRadius: "10px", border: "1px solid #475569", backgroundColor: "#0f172a", color: "white", outline: "none" }}
+                required
+              >
+                <option value="">-- सर्विस चुनें --</option>
+                <option value="House Cleaning">House Cleaning (घर की सफाई)</option>
+                <option value="AC Repair">AC Repair & Service</option>
+                <option value="Electrician">Electrician (बिजली का काम)</option>
+                <option value="Plumbing">Plumbing (नल का काम)</option>
+                <option value="Other">Other (अन्य)</option>
+              </select>
+            </div>
 
-          <button 
-            type="submit" 
-            disabled={loading}
-            style={{
-              padding: "15px",
-              backgroundColor: loading ? "#444" : "#0070f3",
-              color: "white",
-              border: "none",
-              borderRadius: "8px",
-              fontSize: "1rem",
-              fontWeight: "bold",
-              cursor: loading ? "not-allowed" : "pointer",
-              transition: "0.3s"
-            }}
-          >
-            {loading ? "Booking Process हो रही है..." : "Book Service Now"}
-          </button>
-        </form>
-      </div>
+            <button 
+              type="submit" 
+              disabled={loading}
+              style={{
+                padding: "16px",
+                backgroundColor: loading ? "#475569" : "#0284c7",
+                color: "white",
+                border: "none",
+                borderRadius: "10px",
+                fontSize: "1.1rem",
+                fontWeight: "bold",
+                cursor: loading ? "not-allowed" : "pointer",
+                transition: "all 0.3s ease",
+                marginTop: "10px"
+              }}
+            >
+              {loading ? "Processing..." : "Confirm Booking 🚀"}
+            </button>
+          </form>
+        </section>
+
+        {/* Features Section */}
+        <section style={{ marginTop: "80px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "30px", textAlign: "center" }}>
+          <div style={{ padding: "20px", background: "#1e293b", borderRadius: "15px" }}>
+            <h3 style={{ color: "#38bdf8" }}>⚡ Fast Service</h3>
+            <p style={{ color: "#94a3b8" }}>बुकिंग के 2 घंटे के अंदर हमारे एक्सपर्ट्स आपके घर पहुँचेंगे।</p>
+          </div>
+          <div style={{ padding: "20px", background: "#1e293b", borderRadius: "15px" }}>
+            <h3 style={{ color: "#38bdf8" }}>🛡️ Trusted Pros</h3>
+            <p style={{ color: "#94a3b8" }}>सभी कर्मचारी पुलिस वेरीफाइड और अनुभवी हैं।</p>
+          </div>
+          <div style={{ padding: "20px", background: "#1e293b", borderRadius: "15px" }}>
+            <h3 style={{ color: "#38bdf8" }}>💰 Fair Pricing</h3>
+            <p style={{ color: "#94a3b8" }}>मार्केट से बेहतर रेट्स और काम की पूरी गारंटी।</p>
+          </div>
+        </section>
+      </main>
+
+      <footer style={{ textAlign: "center", padding: "40px", color: "#64748b", borderTop: "1px solid #1e293b" }}>
+        © 2026 S2H Services Aligarh. All rights reserved.
+      </footer>
     </div>
   );
 }
