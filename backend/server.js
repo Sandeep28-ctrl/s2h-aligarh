@@ -25,26 +25,21 @@ const bookingSchema = new mongoose.Schema({
 
 const Booking = mongoose.model('Booking', bookingSchema);
 
-// 3. Final Updated Email Config (Render & Gmail Fix)
+// 3. Final Gmail Fix (The Guaranteed Method) - रेंडर के लिए सबसे बेस्ट
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false, // 587 के लिए false ज़रूरी है
+  service: 'gmail', // सीधे सर्विस का नाम, कोई पोर्ट या होस्ट की जरूरत नहीं
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
-  },
-  tls: {
-    rejectUnauthorized: false // यह रेंडर के नेटवर्क इशू को फिक्स करेगा
   }
 });
 
 // वेरिफिकेशन चेक: सर्वर स्टार्ट होते ही बताएगा कि ईमेल तैयार है या नहीं
 transporter.verify((error, success) => {
   if (error) {
-    console.log("❌ Email Config Error:", error);
+    console.log("❌ Gmail Connection Failed:", error);
   } else {
-    console.log("✅ Server is ready to send emails");
+    console.log("✅ Gmail is Connected & Ready!");
   }
 });
 
@@ -63,7 +58,7 @@ app.post('/book', async (req, res) => {
         const newBooking = new Booking({ name, service });
         await newBooking.save();
 
-        // 2. ईमेल भेजें
+        // 2. ईमेल नोटिफिकेशन भेजें
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: process.env.EMAIL_USER, // आपको अपने ही ईमेल पर खबर मिलेगी
@@ -88,7 +83,7 @@ app.post('/book', async (req, res) => {
     }
 });
 
-// (B) सभी बुकिंग्स देखने के लिए API
+// (B) सभी बुकिंग्स देखने के लिए API (Admin Panel के लिए)
 app.get('/admin/bookings', async (req, res) => {
     try {
         const allBookings = await Booking.find().sort({ date: -1 });
