@@ -25,27 +25,34 @@ const bookingSchema = new mongoose.Schema({
 
 const Booking = mongoose.model('Booking', bookingSchema);
 
-// 3. Final Gmail Fix (The Guaranteed Method) - रेंडर के लिए सबसे बेस्ट
+// 3. Updated Email Config with Timeouts (Render Fix)
 const transporter = nodemailer.createTransport({
-  service: 'gmail', // सीधे सर्विस का नाम, कोई पोर्ट या होस्ट की जरूरत नहीं
+  host: 'smtp.gmail.com',
+  port: 465, 
+  secure: true, 
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
+  },
+  connectionTimeout: 10000, // 10 सेकंड का समय
+  greetingTimeout: 10000,
+  socketTimeout: 10000,
+  tls: {
+    rejectUnauthorized: false
   }
 });
 
-// वेरिफिकेशन चेक: सर्वर स्टार्ट होते ही बताएगा कि ईमेल तैयार है या नहीं
+// वेरिफिकेशन चेक
 transporter.verify((error, success) => {
   if (error) {
-    console.log("❌ Gmail Connection Failed:", error);
+    console.log("❌ Email Connection Failed:", error);
   } else {
-    console.log("✅ Gmail is Connected & Ready!");
+    console.log("✅ Server is ready to send emails");
   }
 });
 
 // 4. API Routes
 
-// (A) बुकिंग सेव करने और ईमेल भेजने के लिए API
 app.post('/book', async (req, res) => {
     try {
         const { name, service } = req.body;
@@ -54,14 +61,12 @@ app.post('/book', async (req, res) => {
             return res.status(400).json({ success: false, message: "कृपया सभी जानकारी भरें" });
         }
 
-        // 1. डेटाबेस में सेव करें
         const newBooking = new Booking({ name, service });
         await newBooking.save();
 
-        // 2. ईमेल नोटिफिकेशन भेजें
         const mailOptions = {
             from: process.env.EMAIL_USER,
-            to: process.env.EMAIL_USER, // आपको अपने ही ईमेल पर खबर मिलेगी
+            to: process.env.EMAIL_USER, 
             subject: 'New Booking Alert! 🚀 - S2H Smart Services',
             text: `बधाई संदीप भाई! \n\nआपकी वेबसाइट "Smart Services to Home" पर एक नई बुकिंग आई है। \n\nग्राहक का नाम: ${name} \nसर्विस की ज़रूरत: ${service} \n\nजल्द से जल्द संपर्क करें!`
         };
@@ -74,38 +79,34 @@ app.post('/book', async (req, res) => {
             }
         });
 
-        console.log("नई बुकिंग मिली और सेव हुई:", req.body);
+        console.log("नई बुकिंग मिली:", req.body);
         res.status(200).json({ success: true, message: "Booking Saved & Notification Sent!" });
         
     } catch (error) {
         console.error("Booking Error:", error);
-        res.status(500).json({ success: false, message: "Server Error: समस्या आई है" });
+        res.status(500).json({ success: false, message: "Server Error" });
     }
 });
 
-// (B) सभी बुकिंग्स देखने के लिए API (Admin Panel के लिए)
 app.get('/admin/bookings', async (req, res) => {
     try {
         const allBookings = await Booking.find().sort({ date: -1 });
         res.status(200).json({ success: true, data: allBookings });
     } catch (error) {
-        console.error("Admin Fetch Error:", error);
-        res.status(500).json({ success: false, message: "डेटा नहीं मिल रहा" });
+        res.status(500).json({ success: false });
     }
 });
 
-// (C) किसी खास बुकिंग को डिलीट करने के लिए API
 app.delete('/admin/bookings/:id', async (req, res) => {
     try {
         const { id } = req.params;
         await Booking.findByIdAndDelete(id);
-        res.status(200).json({ success: true, message: "Booking deleted successfully!" });
+        res.status(200).json({ success: true });
     } catch (error) {
-        res.status(500).json({ success: false, message: "Delete करने में एरर आया" });
+        res.status(500).json({ success: false });
     }
 });
 
-// 5. Server Start
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`🚀 Server is running on Port: ${PORT}`);
