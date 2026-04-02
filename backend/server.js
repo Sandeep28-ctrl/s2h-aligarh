@@ -1,4 +1,4 @@
- const express = require('express');
+const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
@@ -25,7 +25,7 @@ const bookingSchema = new mongoose.Schema({
 
 const Booking = mongoose.model('Booking', bookingSchema);
 
-// 3. Updated Email Config with Timeouts (Render Fix)
+// 3. Email Config (अभी के लिए इसे शांत रखा है)
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465, 
@@ -34,20 +34,8 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
   },
-  connectionTimeout: 10000, // 10 सेकंड का समय
-  greetingTimeout: 10000,
-  socketTimeout: 10000,
   tls: {
     rejectUnauthorized: false
-  }
-});
-
-// वेरिफिकेशन चेक
-transporter.verify((error, success) => {
-  if (error) {
-    console.log("❌ Email Connection Failed:", error);
-  } else {
-    console.log("✅ Server is ready to send emails");
   }
 });
 
@@ -61,26 +49,32 @@ app.post('/book', async (req, res) => {
             return res.status(400).json({ success: false, message: "कृपया सभी जानकारी भरें" });
         }
 
+        // बुकिंग डेटाबेस में सेव होगी
         const newBooking = new Booking({ name, service });
         await newBooking.save();
 
+        /* ईमेल वाला हिस्सा अभी बंद है (Temporarily Disabled)
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: process.env.EMAIL_USER, 
             subject: 'New Booking Alert! 🚀 - S2H Smart Services',
-            text: `बधाई संदीप भाई! \n\nआपकी वेबसाइट "Smart Services to Home" पर एक नई बुकिंग आई है। \n\nग्राहक का नाम: ${name} \nसर्विस की ज़रूरत: ${service} \n\nजल्द से जल्द संपर्क करें!`
+            text: `बधाई संदीप भाई! \n\nग्राहक: ${name} \nसर्विस: ${service}`
         };
 
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 console.log("❌ Email Sending Error:", error);
             } else {
-                console.log("✅ Email Sent Successfully: " + info.response);
+                console.log("✅ Email Sent Successfully");
             }
         });
+        */
 
-        console.log("नई बुकिंग मिली:", req.body);
-        res.status(200).json({ success: true, message: "Booking Saved & Notification Sent!" });
+        console.log("✅ नई बुकिंग मिली और DB में सेव हुई:", req.body);
+        res.status(200).json({ 
+            success: true, 
+            message: "बुकिंग मिल गई! हमारी टीम जल्द संपर्क करेगी।" 
+        });
         
     } catch (error) {
         console.error("Booking Error:", error);
